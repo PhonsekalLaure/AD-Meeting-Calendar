@@ -1,5 +1,5 @@
 <?php
-$configs = require UTIL_PATH . 'envSetter.util.php';
+$configs = require UTILS_PATH . 'envSetter.util.php';
 $pgConfig = $configs['pgConfig'];
 
 $host = $pgConfig['host'];

@@ -1,6 +1,6 @@
 <?php
 try {
-    $configs = require UTIL_PATH . 'envSetter.util.php';
+    $configs = require UTILS_PATH . 'envSetter.util.php';
     $mongoConfig = $configs['mongoConfig'];
 
     $mongo = new MongoDB\Driver\Manager($mongoConfig['uri']);
