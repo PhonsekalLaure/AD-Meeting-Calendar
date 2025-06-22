@@ -5,4 +5,4 @@ CREATE TABLE IF NOT EXISTS meeting_users (
     PRIMARY KEY (meeting_id, user_id)
 );
 
-COMMENT ON TABLE meeting_users IS 'Associative table linking users to meetings, specifying each user\'s role in the meeting.';
+COMMENT ON TABLE meeting_users IS 'Associative table linking users to meetings, specifying each user''s role in the meeting.';
