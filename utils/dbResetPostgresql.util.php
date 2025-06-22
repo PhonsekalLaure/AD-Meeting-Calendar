@@ -44,3 +44,6 @@ foreach ($tables as $table) {
 }
 
 echo "✅ Tables reset successfully.\n";
+
+
+//docker-compose exec ad-meeting-calendar composer postgresql:reset
