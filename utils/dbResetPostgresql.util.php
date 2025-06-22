@@ -11,27 +11,36 @@ require 'bootstrap.php';
 // 3) envSetter
 require_once UTILS_PATH . '/envSetter.util.php';
 
+echo "✅ Connected to PostgreSQL.\n";
+
+// ——— Connect to PostgreSQL ———
 $dsn = "pgsql:host={$pgConfig['host']};port={$pgConfig['port']};dbname={$pgConfig['db']}";
 $pdo = new PDO($dsn, $pgConfig['user'], $pgConfig['pass'], [
-PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+    PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
 ]);
 
-// Just indicator it was working
-echo "Applying schema from database/user.model.sql…\n";
+// ——— Apply schemas before truncating ———
+echo "📦 Applying schema files...\n";
+$schemaFiles = [
+    'database/user.model.sql',
+    'database/meeting.model.sql',
+    'database/meeting_user.model.sql',
+    'database/task.model.sql'
+];
 
-$sql = file_get_contents('database/user.model.sql');
-
-// Another indicator but for failed creation
-if ($sql === false) {
-  throw new RuntimeException("Could not read database/user.model.sql");
-} else {
-    echo "Creation Success from the database/user.model.sql";
+foreach ($schemaFiles as $file) {
+    echo "📄 Applying $file...\n";
+    $sql = file_get_contents($file);
+    if ($sql === false) {
+        throw new RuntimeException("❌ Could not read $file");
+    }
+    $pdo->exec($sql);
 }
 
-// If your model.sql contains a working command it will be executed
-$pdo->exec($sql);
-
-echo "\nTruncating tables…\n";
-foreach (['users'] as $table) {
-  $pdo->exec("TRUNCATE TABLE {$table} RESTART IDENTITY CASCADE;");
+echo "🔁 Truncating tables…\n";
+$tables = ['meeting_users', 'tasks', 'meetings', 'users'];
+foreach ($tables as $table) {
+    $pdo->exec("TRUNCATE TABLE {$table} RESTART IDENTITY CASCADE;");
 }
+
+echo "✅ Tables reset successfully.\n";
