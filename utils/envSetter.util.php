@@ -1,5 +1,5 @@
 <?php
-require_once BASE_PATH . '/vendor/autoload.php';
+require_once VENDOR_PATH . 'autoload.php';
 
 $envFile = BASE_PATH . '/.env';
 if (file_exists($envFile)) {
