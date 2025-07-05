@@ -43,6 +43,6 @@ if ($action === 'login' && $_SERVER['REQUEST_METHOD'] === 'POST') {
 elseif ($action === 'logout') {
     Auth::init();
     Auth::logout();
-    header('Location: /pages/login/index.php');
+    header('Location: /index.php');
     exit;
 }
