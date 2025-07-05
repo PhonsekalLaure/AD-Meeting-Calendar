@@ -1,18 +1,18 @@
 <?php
 declare(strict_types=1);
 require_once BASE_PATH . '/bootstrap.php';
-require_once BASE_PATH . '/vendor/autoload.php';
-require_once UTILS_PATH . '/auth.util.php';
-require_once UTILS_PATH . '/envSetter.util.php';
+require_once VENDOR_PATH . 'autoload.php';
+require_once UTILS_PATH . 'auth.util.php';
+require_once UTILS_PATH . 'envSetter.util.php';
 
 // Initialize session
 Auth::init();
 
 $host = 'host.docker.internal';
-$port = $databases['pgPort'];
-$username = $databases['pgUser'];
-$password = $databases['pgPassword'];
-$dbname = $databases['pgDB'];
+$port = $pgConfig['port'];
+$username = $pgConfig['user'];
+$password = $pgConfig['pass'];
+$dbname = $pgConfig['db'];
 
 // Connect to Postgres
 $dsn = "pgsql:host={$host};port={$port};dbname={$dbname}";
@@ -26,17 +26,15 @@ $action = $_REQUEST['action'] ?? null;
 if ($action === 'login' && $_SERVER['REQUEST_METHOD'] === 'POST') {
     $usernameInput = trim($_POST['username'] ?? '');
     $passwordInput = trim($_POST['password'] ?? '');
+    
     if (Auth::login($pdo, $usernameInput, $passwordInput)) {
         $user = Auth::user();
-
-        if ($user["role"] == "team lead") {
-            header('Location: /pages/users/index.php');
-        } else {
-            header('Location: /index.php');
-        }
+        error_log("[auth.handler.php] Login successful for user_id={$user['id']}");
+        header('Location: /pages/login/index.php'); // Redirect to dashboard or another page
         exit;
     } else {
-        header('Location: /pages/login/index.php?error=Invalid%Credentials');
+        error_log("[auth.handler.php] Login failed for username='{$usernameInput}'");
+        header('Location: /index.php?error=Invalid%20Credentials');
         exit;
     }
 }
@@ -48,7 +46,3 @@ elseif ($action === 'logout') {
     header('Location: /pages/login/index.php');
     exit;
 }
-
-// If no valid action, redirect to login
-header('Location: /pages/login/index.php');
-exit;
