@@ -1,0 +1,17 @@
+.success-container {
+    text-align: center;
+    background: #fff;
+    padding: 3rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    width: 100%;
+    max-width: 500px;
+    box-sizing: border-box;
+}
+
+.success-container h1 {
+    color: #28a745;
+    margin: 0;
+    font-size: 2rem;
+}
+
