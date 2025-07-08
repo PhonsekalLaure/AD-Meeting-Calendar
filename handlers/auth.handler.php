@@ -34,7 +34,7 @@ if ($action === 'login' && $_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     } else {
         error_log("[auth.handler.php] Login failed for username='{$usernameInput}'");
-        header('Location: /index.php?error=Invalid%20Credentials');
+        header('Location: /index.php?error=Invalid%20Username%20or%20Password');
         exit;
     }
 }
